@@ -1,64 +1,57 @@
-# python-project-internship
-Random Username Generator
-Random Username Generator
+import random
+import string
 
-Project Overview
+# Function to load predefined lists of adjectives and nouns
+def load_words():
+    adjectives = ["Cool", "Happy", "Fast", "Clever", "Brave", "Mighty", "Fierce", "Loyal"]
+    nouns = ["Tiger", "Dragon", "Eagle", "Wolf", "Panther", "Falcon", "Cheetah", "Shark"]
+    return adjectives, nouns
 
-The Random Username Generator is a Python-based application that generates unique and creative usernames for social media or gaming platforms. The program allows customization by including numbers and special characters and can also save the generated usernames to a file.
+# Function to generate a random username based on user preferences
+def generate_username(include_numbers=True, include_special=False, length=None):
+    adjectives, nouns = load_words()
+    adj = random.choice(adjectives)
+    noun = random.choice(nouns)
+    
+    username = adj + noun
+    
+    if include_numbers:
+        username += str(random.randint(10, 99))
+    
+    if include_special:
+        special_chars = "!@#$%^&*"
+        username += random.choice(special_chars)
+    
+    if length and len(username) > length:
+        username = username[:length]
+    
+    return username
 
-Features
+# Function to save generated usernames to a file
+def save_to_file(username, filename="usernames.txt"):
+    with open(filename, "a") as file:
+        file.write(username + "\n")
+    print(f"Username '{username}' saved to {filename}")
 
-Random Username Generation: Combines predefined adjectives and nouns to create unique usernames.
-
-Customization Options:
-
-Option to include numbers.
-
-Option to include special characters.
-
-Ability to set a maximum username length.
-
-File Handling: Saves generated usernames to a text file for future reference.
-
-User-Friendly Interaction: Provides clear prompts and messages for user input.
-
-How to Use
-
-Prerequisites
-
-Ensure you have Python installed on your system.
-
-Installation
-
-Clone the repository or download the project files.
-
-Install required dependencies (if any) using:
-
-pip install -r requirements.txt
-
-Running the Script
-
-Run the script using the command:
-
-python random_username_generator.py
-
-User Interaction
-
-The program will prompt whether to include numbers and special characters.
-
-It will ask if you want to set a maximum username length.
-
-A random username is generated based on your input.
-
-You can choose to save the username to a file (usernames.txt).
-
-Files Included
-
-random_username_generator.py - The main script.
-
-README.md - Documentation.
-
-requirements.txt - List of dependencies (if applicable).
-
-usernames.txt - Stores generated usernames (optional, generated at runtime).
-
+# Main function to interact with the user
+def main():
+    print("Welcome to the Random Username Generator!")
+    
+    # User preferences input
+    include_numbers = input("Include numbers? (yes/no): ").strip().lower() == "yes"
+    include_special = input("Include special characters? (yes/no): ").strip().lower() == "yes"
+    length = input("Set a maximum username length (press Enter to skip): ").strip()
+    length = int(length) if length.isdigit() else None
+    
+    # Generate username based on user input
+    username = generate_username(include_numbers, include_special, length)
+    print(f"Generated Username: {username}")
+    
+    # Option to save the username
+    save_option = input("Do you want to save this username? (yes/no): ").strip().lower()
+    if save_option == "yes":
+        save_to_file(username)
+    
+# Run the main function if script is executed directly
+if __name__ == "__main__":
+    main()
